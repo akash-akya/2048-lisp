@@ -38,27 +38,53 @@
 
 (defun move-up ()
     (dotimes (i *size*)
-      (set-col (sufix-zero (merge-list (remove-if #'zerop (get-col i)))) i))
-    (disp))
+      (set-col (sufix-zero (merge-list (remove-if #'zerop (get-col i)))) i)))
 
 (defun move-down ()
     (dotimes (i *size*)
-      (set-col (prefix-zero (merge-list (remove-if #'zerop (get-col i)))) i))
-    (disp))
+      (set-col (prefix-zero (merge-list (remove-if #'zerop (get-col i)))) i)))
 
 (defun move-left ()
     (dotimes (i *size*)
-      (set-row (sufix-zero (merge-list (remove-if #'zerop (get-row i)))) i))
-    (disp))
+      (set-row (sufix-zero (merge-list (remove-if #'zerop (get-row i)))) i)))
   
 (defun move-right ()
     (dotimes (i *size*)
-      (set-row (prefix-zero (merge-list (remove-if #'zerop (get-row i)))) i))
-    (disp))
+      (set-row (prefix-zero (merge-list (remove-if #'zerop (get-row i)))) i)))
 
 (defun disp ()
-  (dotimes (i *size*)
-    (format t "~s~%" (get-row i))))
+    (dotimes (i *size*)
+        (format t "~s~%" (get-row i))))
+
+(defun get-zero-list ()
+    (let ((lst ()))
+        (dotimes (i *size*)
+            (dotimes (j *size*)
+                (when (zerop (get-ele i j))
+                    (push (list i j) lst))))
+        lst))
+
+(defun l ()
+    (move-left))
+
+(defun r ()
+    (move-right))
+
+(defun u ()
+    (move-up))
+
+(defun d ()
+    (move-down))
+
+(defun game-loop ()
+    (let*  ((lst (get-zero-list))
+            (num (random (length lst))))
+            (set-ele (first (nth num lst)) (second (nth num lst)) 2))
+    (disp)
+    (if (zerop (length (get-zero-list))) (format t "**GAME-OVER**")
+       (progn            
+           (eval (read))
+           (game-loop))))
 
 (defun set-random ()
   (set-ele 0 1 2)
